@@ -1,0 +1,7 @@
+taskwarrior-web:
+  build: .
+  volumes:
+    - /home/matejc/.taskrc:/home/user/.taskrc
+    - /home/matejc/.task:/home/user/.task
+  ports:
+    - 8080:5678
