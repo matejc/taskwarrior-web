@@ -15,7 +15,7 @@ module TaskwarriorWeb
 
     def initialize(attributes = {})
       attributes.each do |attr, value|
-        send("#{attr}=", value) if respond_to?(attr.to_sym)
+        send("#{attr}=", value) if respond_to?(attr.to_s.to_sym)
       end
 
       @_errors = []
@@ -78,7 +78,8 @@ module TaskwarriorWeb
     # Get a single task by UUID or ID. Returns nil if no such task was found.
 
     def self.find(uuid)
-      tasks = Parser.parse(Command.new(:query, nil, :uuid => uuid).run)
+      c = "[#{Command.new(:query, nil, :uuid => uuid).run}]"
+      tasks = Parser.parse(c)
       tasks.empty? ? nil : Task.new(tasks.first)
     end
 
@@ -107,7 +108,8 @@ module TaskwarriorWeb
       else
         command = Command.new(:query, nil, *args)
       end
-      Parser.parse(command.run).each { |result| tasks << Task.new(result) }
+      c = "[#{command.run}]"
+      Parser.parse(c).each { |result| tasks << Task.new(result) }
       tasks
     end
 
